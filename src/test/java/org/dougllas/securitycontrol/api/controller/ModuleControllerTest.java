@@ -71,7 +71,7 @@ public class ModuleControllerTest {
                 .accept(APPLICATION_JSON)
         )
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
-                .andExpect(jsonPath("$.messages[0]").value("Campo nome é obrigatório."))
+                .andExpect(jsonPath("$.messages[0]").value("Campo name é obrigatório."))
         ;
 
     }

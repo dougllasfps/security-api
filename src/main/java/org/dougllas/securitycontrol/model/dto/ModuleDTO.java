@@ -12,6 +12,6 @@ public class ModuleDTO {
 
     private Long id;
 
-    @NotEmpty(message = "Campo nome é obrigatório.")
+    @NotEmpty(message = "Campo name é obrigatório.")
     private String name;
 }
