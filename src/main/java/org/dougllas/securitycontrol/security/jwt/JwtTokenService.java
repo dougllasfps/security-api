@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,15 +54,14 @@ public class JwtTokenService implements Serializable{
      * @param token
      * @return Date
      */
-    public Date getExpirationDateFromToken(String token) {
-        Date expiration;
+    public LocalDateTime getExpirationDateFromToken(String token) {
         try {
             Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
+            Date expiration = claims.getExpiration();
+            return expiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         } catch (Exception e) {
-            expiration = null;
+            return null;
         }
-        return expiration;
     }
 
     /**
@@ -128,8 +130,10 @@ public class JwtTokenService implements Serializable{
      *
      * @return Date
      */
-    private Date gerarDataExpiracao() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
+    private LocalDateTime gerarDataExpiracao() {
+        return Instant.ofEpochMilli(System.currentTimeMillis() + expiration * 1000)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     /**
@@ -139,11 +143,11 @@ public class JwtTokenService implements Serializable{
      * @return boolean
      */
     private boolean tokenExpirado(String token) {
-        Date dataExpiracao = this.getExpirationDateFromToken(token);
+        LocalDateTime dataExpiracao = this.getExpirationDateFromToken(token);
         if (dataExpiracao == null) {
             return false;
         }
-        return dataExpiracao.before(new Date());
+        return dataExpiracao.isBefore(LocalDateTime.now());
     }
 
     /**
@@ -153,7 +157,10 @@ public class JwtTokenService implements Serializable{
      * @return String
      */
     private String gerarToken(Map<String, Object> claims) {
-        return Jwts.builder().setClaims(claims).setExpiration(gerarDataExpiracao())
+        Date dataExpiracao = Date.from(gerarDataExpiracao().atZone(ZoneId.systemDefault()).toInstant());
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(dataExpiracao)
                 .signWith(SignatureAlgorithm.HS512, signingKey).compact();
     }
 }

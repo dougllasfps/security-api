@@ -1,8 +1,6 @@
 package org.dougllas.securitycontrol.model.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,9 +11,11 @@ import java.util.Collection;
  * Criado por dougllas.sousa em 14/03/2018.
  */
 
-@Builder
 @Entity
 @Table(name = "user")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
