@@ -18,7 +18,7 @@ public class UserDTO {
 
     private Long id;
 
-    private String nome;
+    private String name;
 
     @NotNull(message = "Campo login é obrigatório.")
     private String username;
@@ -38,7 +38,7 @@ public class UserDTO {
         dto.setUsername(user.getUsername());
         dto.setAuthenticated(user.getId() != null);
         dto.setId(user.getId());
-        dto.setNome(user.getName());
+        dto.setName(user.getName());
         return dto;
     }
 
@@ -47,7 +47,7 @@ public class UserDTO {
         user.setPassword(dto.getPassword());
         user.setUsername(dto.getUsername());
         user.setId(dto.getId());
-        user.setName(dto.getNome());
+        user.setName(dto.getName());
         return user;
     }
 }

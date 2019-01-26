@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.Serializable;
@@ -45,7 +46,7 @@ public class UserController implements Serializable {
         }
 
 
-        return new ResponseEntity(new ApiError("Usuário e/ou senha não conferem."), HttpStatus.UNAUTHORIZED);
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário e/ou senha não conferem." );// new ResponseEntity(new ApiError("Usuário e/ou senha não conferem."), HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/signup")
