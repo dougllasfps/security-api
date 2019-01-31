@@ -62,7 +62,7 @@ public class UserControllerTest {
         ).andExpect(status().isOk())
 
          .andExpect(jsonPath("$.token").isNotEmpty())
-         .andExpect(jsonPath("$.nome").value(user.getName()));
+         .andExpect(jsonPath("$.name").value(user.getName()));
 
     }
 
@@ -110,7 +110,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
-         .andExpect(jsonPath("$.nome").value(user.getName()))
+         .andExpect(jsonPath("$.name").value(user.getName()))
          .andExpect(jsonPath("$.token").isNotEmpty());
     }
 }
