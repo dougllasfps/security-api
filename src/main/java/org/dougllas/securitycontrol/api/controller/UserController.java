@@ -45,7 +45,6 @@ public class UserController implements Serializable {
             return ResponseEntity.ok(userDTO);
         }
 
-
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário e/ou senha não conferem." );// new ResponseEntity(new ApiError("Usuário e/ou senha não conferem."), HttpStatus.UNAUTHORIZED);
     }
 

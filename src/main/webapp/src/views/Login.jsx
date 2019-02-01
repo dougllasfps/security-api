@@ -1,10 +1,35 @@
 import React from 'react'
-import {DefaultForm as Form} from '../components/common/Form'
+import withConsumer from '@/app/decorators/withConsumer'
+import {AuthConsumer} from '@/app/context/AuthContext'
+import UserService from '@/app/service/UserService'
 
-export default class Login extends React.Component{
+class Login extends React.Component{
 
-    onSubmit(values){
-       console.log(values)
+    state = {
+        username: '',
+        password: ''
+    }
+
+    constructor(){
+        super()
+        this.service = new UserService()
+    }
+
+    onSubmit = async (e) => {
+       e.preventDefault();
+       try{
+          const resp = await this.service.auth(this.state)
+          console.log(resp)
+       }catch(error) {
+           console.log(error)
+       }
+    }
+
+    handleChange = (e) => {
+        const name = e.target.name
+        const value = e.target.value
+
+        this.setState({...this.state, [name]: value})
     }
 
     render(){
@@ -17,15 +42,19 @@ export default class Login extends React.Component{
             <div className="login-box-body">
                 <p className="login-box-msg">Entre para inicializar sua sessão</p>
 
-                <Form onSubmit={this.onSubmit}>
+                <form>
 
                     <div className="form-group has-feedback">
-                        <input  type="text" className="form-control" placeholder="Login ou Email" name="username" />
+                        <input  onChange={e => this.handleChange(e)}
+                                type="text" value={this.state.username}
+                                className="form-control" placeholder="Login ou Email" name="username" />
                         <span className="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
 
                     <div className="form-group has-feedback">
-                        <input type="password" className="form-control" placeholder="Senha" name="password"/>
+                        <input  onChange={e => this.handleChange(e)}
+                                type="password" value={this.state.password}
+                                className="form-control" placeholder="Senha" name="password"/>
                         <span className="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
 
@@ -36,13 +65,15 @@ export default class Login extends React.Component{
                             </div>
                         </div>
                         <div className="col-xs-4">
-                            <button type="submit" className="btn btn-primary btn-block btn-flat">Entrar</button>
+                            <button onClick={this.onSubmit} type="submit" className="btn btn-primary btn-block btn-flat">Entrar</button>
                         </div>
                     </div>
 
-                </Form>
+                </form>
             </div>
         </div>
         )
     }
 }
+
+export default withConsumer(Login, AuthConsumer)

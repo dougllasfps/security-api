@@ -24,5 +24,7 @@
 /nbdist/
 /.nb-gradle/
 
+### Front END ###
+
 **/node_modules/**
 **/build/**

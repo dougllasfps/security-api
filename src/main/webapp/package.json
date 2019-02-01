@@ -9,6 +9,7 @@
     "font-awesome": "4.7.0",
     "ionicons": "^3.0.0",
     "jquery": "2.2.3",
+    "log4js": "^3.0.6",
     "primereact": "^3.0.0-rc.1",
     "react": "16.6.3",
     "react-dom": "16.6.3",

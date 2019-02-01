@@ -10,8 +10,8 @@ export default class ApiClientService{
         return await axios.get(`${this.apiUrl}${query}`)
     }
 
-    post = async (object) => {
-        return await axios.post(this.apiUrl, object)
+    post = async (url, params) => {
+        return await axios.post(`${this.apiUrl}${url}`, params)
     }
 
     put = async (object) => {
