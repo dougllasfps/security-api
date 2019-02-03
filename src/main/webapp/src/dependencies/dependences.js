@@ -16,5 +16,5 @@ import 'admin-lte/plugins/iCheck/flat/blue.css'
 import 'primereact/resources/themes/rhea/theme.css';
 import 'primereact/resources/primereact.min.css';
 
-
+import 'toastr/build/toastr.css'
 import './custom.css'

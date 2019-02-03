@@ -10,8 +10,8 @@ export default class ApiClientService{
         return await axios.get(`${this.apiUrl}${query}`)
     }
 
-    post = async (url, params) => {
-        return await axios.post(`${this.apiUrl}${url}`, params)
+    post = (url, params) => {
+        return axios.post(`${this.apiUrl}${url}`, params)
     }
 
     put = async (object) => {
@@ -24,6 +24,6 @@ export default class ApiClientService{
     }
 
     static setToken( token ){
-        axios.default.headers.commom['Authorization'] = `Bearer ${token}`
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
 }

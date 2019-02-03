@@ -1,5 +1,6 @@
 package org.dougllas.securitycontrol.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.dougllas.securitycontrol.model.entity.User;
@@ -23,18 +24,22 @@ public class UserDTO {
     @NotNull(message = "Campo login é obrigatório.")
     private String username;
 
+    @JsonIgnore
     @NotNull(message = "Campo senha é obrigatório.")
     private String password;
 
+    @JsonIgnore
     private String passwordMatch;
 
+    @JsonIgnore
     private boolean authenticated;
 
+    @JsonIgnore
     private String token;
 
     public static UserDTO entityToDto(User user){
         UserDTO dto = new UserDTO();
-        dto.setPassword(user.getPassword());
+//        dto.setPassword(user.getPassword());
         dto.setUsername(user.getUsername());
         dto.setAuthenticated(user.getId() != null);
         dto.setId(user.getId());

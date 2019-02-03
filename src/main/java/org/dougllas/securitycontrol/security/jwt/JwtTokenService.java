@@ -131,7 +131,7 @@ public class JwtTokenService implements Serializable{
      * @return Date
      */
     private LocalDateTime gerarDataExpiracao() {
-        return Instant.ofEpochMilli(System.currentTimeMillis() + expiration * 1000)
+        return Instant.ofEpochMilli(System.currentTimeMillis() + expiration * 60 * 1000)
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
     }

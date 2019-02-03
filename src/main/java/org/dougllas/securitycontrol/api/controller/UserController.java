@@ -1,6 +1,7 @@
 package org.dougllas.securitycontrol.api.controller;
 
 import org.dougllas.securitycontrol.api.response.ApiError;
+import org.dougllas.securitycontrol.model.dto.AuthResponseDTO;
 import org.dougllas.securitycontrol.model.dto.UserDTO;
 import org.dougllas.securitycontrol.model.entity.User;
 import org.dougllas.securitycontrol.security.jwt.JwtTokenService;
@@ -8,6 +9,7 @@ import org.dougllas.securitycontrol.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -32,6 +34,23 @@ public class UserController implements Serializable {
         return ResponseEntity.ok(userService.findAll());
     }
 
+    @PostMapping("/validate")
+    public ResponseEntity validaToken(@RequestParam("token") String token){
+        boolean valido = tokenService.tokenValido(token);
+
+        if(!valido){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sessão inválida." );
+        }
+
+        String userName = tokenService.getUsernameFromToken(token);
+        User user = userService.loadUserByUsername(userName);
+
+        AuthResponseDTO dto = new AuthResponseDTO();
+        dto.setUser(UserDTO.entityToDto(user));
+        dto.setToken(token);
+        return ResponseEntity.ok(dto);
+    }
+
     @PostMapping("/auth")
     public ResponseEntity login(
             @RequestParam("username") String login,
@@ -40,12 +59,13 @@ public class UserController implements Serializable {
         Optional<User> user = userService.autenticarUsuario(login, pass);
 
         if(user.isPresent()){
-            UserDTO userDTO = UserDTO.entityToDto(user.get());
-            userDTO.setToken(tokenService.obterToken(user.get()));
-            return ResponseEntity.ok(userDTO);
+            AuthResponseDTO dto = new AuthResponseDTO();
+            dto.setUser(UserDTO.entityToDto(user.get()));
+            dto.setToken(tokenService.obterToken(user.get()));
+            return ResponseEntity.ok(dto);
         }
 
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário e/ou senha não conferem." );// new ResponseEntity(new ApiError("Usuário e/ou senha não conferem."), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(new ApiError("Usuário e/ou senha não conferem."), HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/signup")
