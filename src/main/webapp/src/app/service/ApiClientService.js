@@ -14,6 +14,10 @@ export default class ApiClientService{
         return axios.post(`${this.apiUrl}${url}`, params)
     }
 
+    asyncPost = async (url, params) => {
+        return await axios.post(`${this.apiUrl}${url}`, params)
+    }
+
     put = async (object) => {
         const {id} = object
         return await axios.put(`${this.apiUrl}/${id}`, object)

@@ -65,8 +65,8 @@ class AuthContextProvider extends Component{
         return {}
     }
 
-    componentDidMount(){
-       const { token, user } = this.validateSession()     
+    async componentDidMount(){
+       const { token, user } = await this.validateSession()     
        
        console.log('token validado: ' , token)
 
