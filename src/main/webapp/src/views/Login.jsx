@@ -13,7 +13,7 @@ class Login extends React.Component {
 
     constructor() {
         super()
-        this.service = new UserService()
+        this.service = new UserService();
     }
 
     onSubmit = async (e) => {
@@ -24,9 +24,8 @@ class Login extends React.Component {
                 const {user, token} = resp.data 
                 this.props.login(user, token)
             }).catch(err => {
-                console.log(err)
-                if(err.response){
-                    Messages.error(err.messages[0])
+                if(err.response && err.response.data){
+                    Messages.error(err.response.data.messages)
                 }
             })
 

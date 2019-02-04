@@ -19,16 +19,18 @@ public class UserDTO {
 
     private Long id;
 
+    @NotNull(message = "Campo name é obrigatório.")
     private String name;
 
-    @NotNull(message = "Campo login é obrigatório.")
+    @NotNull(message = "Campo username é obrigatório.")
     private String username;
 
     @JsonIgnore
-    @NotNull(message = "Campo senha é obrigatório.")
+    @NotNull(message = "Campo password é obrigatório.")
     private String password;
 
     @JsonIgnore
+    @NotNull(message = "Campo passwordMatch é obrigatório.")
     private String passwordMatch;
 
     @JsonIgnore

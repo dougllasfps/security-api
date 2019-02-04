@@ -20,24 +20,28 @@ toastr.options = {
 
 export default class Messages {
     
-    static message(severity, title, message){
-        toastr[severity]( message, title )
+    static message( severity, title, message ){
+        if(message && message.constructor === Array){
+            message.forEach(msg => toastr[severity]( msg, title ))
+        }else{
+            toastr[severity]( message, title )
+        }
     }
 
     static error = ( message ) => {
-        Messages.message('error', 'Ocorreu um erro', message)
+        Messages.message('error', 'Erro', message)
     }
 
     static info( message ){
-        Messages.message('info', 'Ocorreu um erro', message)
+        Messages.message('info', 'Informação', message)
     }
 
     static warning( message ){
-        Messages.message('warning', 'Ocorreu um erro', message)
+        Messages.message('warning', 'Aviso', message)
     }
 
     static success( message ){
-        Messages.message('success', 'Ocorreu um erro', message)
+        Messages.message('success', 'Sucesso', message)
     }
     
 }

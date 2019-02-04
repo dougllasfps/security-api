@@ -34,7 +34,7 @@ public class UserController implements Serializable {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    @PostMapping("/validate")
+    @PostMapping("/validateToken")
     public ResponseEntity validaToken(@RequestParam("token") String token){
         boolean valido = tokenService.tokenValido(token);
 
