@@ -35,6 +35,10 @@ public class User implements UserDetails {
     @Getter@Setter
     private String name;
 
+    @Column
+    @Getter@Setter
+	private String email;
+
     public Long getId() {
         return id;
     }
@@ -77,5 +81,4 @@ public class User implements UserDetails {
     public String getPassword() {
         return password;
     }
-
 }

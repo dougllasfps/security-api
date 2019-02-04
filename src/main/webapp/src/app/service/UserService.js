@@ -13,7 +13,7 @@ export default class UserService extends ApiClientService {
         return this.post( query )
     }
 
-    validate = async (token) => {
-        return await this.post(`/validateToken?token=${token}`)
+    validate = (token) => {
+        return this.post(`/validateToken?token=${token}`)
     }
 }

@@ -103,7 +103,7 @@ const Header = props => {
                             <img src={userLogo} alt="User Image" />
                             <p>
                                 { props.loggedUser ? props.loggedUser.name : 'Usuário desconhecido' }
-                                <small>Member since Nov. 2012</small>
+                                <small>{props.loggedUser.email}</small>
                             </p>
                         </li>
                         <li className="user-body">

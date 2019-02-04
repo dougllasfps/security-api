@@ -9,8 +9,8 @@ const context = createContext()
 export const AuthConsumer = context.Consumer;
 const AuthProvider = context.Provider
 
-const LOGGED_USER = '_logged_user';
-const LOGGED_USER_TOKEN = '_logged_user_btoken';
+const LOGGED_USER = '_usuarioLogado';
+const LOGGED_USER_TOKEN = '_authToken';
 
 class AuthContextProvider extends Component{
 
@@ -21,12 +21,13 @@ class AuthContextProvider extends Component{
 
     constructor(){
         super()
-        this.userService = new UserService()
+        this.userService = new UserService();
     }
     
     login = (user, token) => {
         localStorage.setItem( LOGGED_USER, JSON.stringify(user) );
         localStorage.setItem( LOGGED_USER_TOKEN, token );
+
         ApiClientService.setToken(token)
         console.log(user)
         this.setState({ ...this.state, authenticated: true, user})
@@ -39,32 +40,33 @@ class AuthContextProvider extends Component{
         this.setState({ ...this.state, authenticated: false})
     }
 
-    validateSession = async () => {
-        const sessionToken = localStorage.getItem( LOGGED_USER_TOKEN ) || null
+    validateSession = () => {
+        const sessionToken = localStorage.getItem( LOGGED_USER_TOKEN )
 
-        console.log(` validando sessao com o token `, sessionToken)
-        
-        if( sessionToken ){
-            try{
-                const resp = await this.userService.validate( sessionToken )
-                const {user, token} = resp.data 
-
-                console.log(` validação: `, JSON.stringify(user))
-                return {
-                    user,
-                    token
-                }
-            }catch(err){
-                Messages.error('erro '+ err )
-                return {}
-            }
+        console.log('Token recuperado do localstorage ', sessionToken)
+      
+        if( sessionToken ){            
+            console.log('Token ', sessionToken)
+            this.userService
+                .validate( sessionToken )
+                .then( resp => {
+                    console.log('deu certo ', resp)
+                    const {user, token} = resp.data 
+                    return {
+                        user,
+                        token
+                    }
+                }).catch( err => {
+                    console.log('deu erro ', err)
+                    return {}
+                })
         }
 
         return {}
     }
 
-    async componentDidMount(){
-       const { token, user } = await this.validateSession()     
+    componentDidMount(){
+       const { token, user } = this.validateSession()     
        
        console.log('token validado: ' , token)
 
