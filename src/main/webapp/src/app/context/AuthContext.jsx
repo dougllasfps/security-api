@@ -29,37 +29,38 @@ class AuthContextProvider extends Component{
         localStorage.setItem( LOGGED_USER_TOKEN, token );
 
         ApiClientService.setToken(token)
-        console.log(user)
+        console.log('login user' ,user)
         this.setState({ ...this.state, authenticated: true, user})
     }
 
     logout = () => {
+        console.log("loginout")
         localStorage.removeItem(LOGGED_USER)
         localStorage.removeItem(LOGGED_USER_TOKEN)
         
         this.setState({ ...this.state, authenticated: false})
     }
 
-    validateSession = () => {
+    validateSession = async () => {
         const sessionToken = localStorage.getItem( LOGGED_USER_TOKEN )
 
-        console.log('Token recuperado do localstorage ', sessionToken)
+        console.log('Token recuperado do localstorage ', sessionToken )
       
         if( sessionToken ){            
-            console.log('Token ', sessionToken)
-            this.userService
-                .validate( sessionToken )
-                .then( resp => {
-                    console.log('deu certo ', resp)
-                    const {user, token} = resp.data 
-                    return {
-                        user,
-                        token
-                    }
-                }).catch( err => {
-                    console.log('deu erro ', err)
+            console.log('Token existe >>>>> ', sessionToken)
+
+            try{
+                const resp = await this.userService.validate( sessionToken )
+                console.log('validate response ', resp)
+                const { user, token } = resp.data 
+                return {
+                    user,
+                    token
+                }
+            }catch( err ){
+                console.log('deu erro ', err)
                     return {}
-                })
+            }
         }
 
         return {}
@@ -73,7 +74,7 @@ class AuthContextProvider extends Component{
        if(!token){
             this.logout()
        }else{
-            this.login( token, user )
+            this.login( user, token)
        }
     }
         
