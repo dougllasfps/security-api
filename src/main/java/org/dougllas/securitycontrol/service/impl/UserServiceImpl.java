@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User cadastrarUsuario(User user) {
+    public User save(User user) {
         String encodedPass = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPass);
         userRepository.save(user);
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> autenticarUsuario(String login, String senha) {
+    public Optional<User> authenticate(String login, String senha) {
         User user = loadUserByUsername(login);
 
         if(user == null){

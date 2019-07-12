@@ -11,11 +11,11 @@ import java.util.Optional;
  */
 public interface UserService extends UserDetailsService {
 
-    User cadastrarUsuario(User user);
+    User save(User user);
 
     List<User> findAll();
 
-    Optional<User> autenticarUsuario(String login, String senha);
+    Optional<User> authenticate(String login, String senha);
 
     Optional<User> findUserById(Long id);
 

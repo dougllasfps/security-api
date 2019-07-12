@@ -44,7 +44,7 @@ public class UserServiceTest {
         given(userRepository.save(Mockito.any(User.class))).willReturn(user);
         given(passwordEncoder.encode(any(String.class))).willReturn(passCodificado);
 
-        User usuarioCadastrado = userService.cadastrarUsuario(user);
+        User usuarioCadastrado = userService.save(user);
 
         then(usuarioCadastrado.getPassword())
                 .as("Password deve estar codificado")
@@ -59,7 +59,7 @@ public class UserServiceTest {
         given(userRepository.findByUsername(anyString())).willReturn(Optional.of(user));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
-        Optional<User> optionalUser = userService.autenticarUsuario(user.getUsername(), user.getPassword());
+        Optional<User> optionalUser = userService.authenticate(user.getUsername(), user.getPassword());
 
         then(optionalUser.get())
                 .as("Verificar se retornou um usuario autenticado")

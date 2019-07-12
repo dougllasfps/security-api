@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class AuthResourceTest {
 
     @MockBean
     UserService userService;
@@ -52,7 +52,7 @@ public class UserControllerTest {
     @Test
     public void deveRetornarUsuarioLogadoComToken() throws Exception {
 
-        given(userService.autenticarUsuario(anyString(), anyString())).willReturn(Optional.of(user));
+        given(userService.authenticate(anyString(), anyString())).willReturn(Optional.of(user));
 
         mvc.perform(
             post(ENDPOINT + "/auth")
@@ -69,7 +69,7 @@ public class UserControllerTest {
     @Test
     public void deveRetornarErroDeAutorizacaoQuandoUsuarioForInvalido() throws Exception {
 
-        given(userService.autenticarUsuario(anyString(), anyString())).willReturn(Optional.empty());
+        given(userService.authenticate(anyString(), anyString())).willReturn(Optional.empty());
 
         mvc.perform(
                 post(ENDPOINT + "/auth")
@@ -102,7 +102,7 @@ public class UserControllerTest {
 
     @Test
     public void deveCadastrarUsuario() throws Exception {
-        given(userService.cadastrarUsuario(any(User.class))).willReturn(user);
+        given(userService.save(any(User.class))).willReturn(user);
 
         mvc.perform(
                 post(ENDPOINT + "/signup")

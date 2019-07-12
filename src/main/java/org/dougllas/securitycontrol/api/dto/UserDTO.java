@@ -1,13 +1,14 @@
-package org.dougllas.securitycontrol.model.dto;
+package org.dougllas.securitycontrol.api.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import javax.validation.constraints.NotEmpty;
+
 import org.dougllas.securitycontrol.model.entity.User;
 import org.dougllas.securitycontrol.validation.FieldMatch;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Criado por dougllas.sousa em 14/03/2018.
