@@ -2,7 +2,6 @@ package org.dougllas.securitycontrol.api.resource;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -10,6 +9,7 @@ import org.dougllas.securitycontrol.api.dto.AuthRequestDTO;
 import org.dougllas.securitycontrol.api.dto.AuthResponseDTO;
 import org.dougllas.securitycontrol.api.dto.UserDTO;
 import org.dougllas.securitycontrol.api.response.BadRequestResponseEntity;
+import org.dougllas.securitycontrol.exception.auth.AuthenticationException;
 import org.dougllas.securitycontrol.model.entity.User;
 import org.dougllas.securitycontrol.security.jwt.JwtTokenService;
 import org.dougllas.securitycontrol.service.UserService;
@@ -58,17 +58,17 @@ public class AuthResource implements Serializable {
 
     @PostMapping
     public ResponseEntity<?> auth( @RequestBody AuthRequestDTO requestDTO  ){
-
-        Optional<User> user = userService.authenticate(requestDTO.getUsername(), requestDTO.getPassword());
-
-        if(user.isPresent()){
-            AuthResponseDTO dto = new AuthResponseDTO();
-            dto.setUser(UserDTO.entityToDto(user.get()));
-            dto.setToken(tokenService.obterToken(user.get()));
-            return ResponseEntity.ok(dto);
-        }
-
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário e/ou senha não conferem.");
+    	try {
+    		User user = userService.authenticate(requestDTO.getUsername(), requestDTO.getPassword());
+    		
+			AuthResponseDTO dto = new AuthResponseDTO();
+			dto.setUser(UserDTO.entityToDto(user));
+			dto.setToken(tokenService.obterToken(user));
+			return ResponseEntity.ok(dto);
+    		
+    	}catch (AuthenticationException e) {
+    		throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+		}
     }
 
     @PostMapping("/signup")

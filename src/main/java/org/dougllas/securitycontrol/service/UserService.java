@@ -4,6 +4,7 @@ import org.dougllas.securitycontrol.model.entity.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -13,9 +14,9 @@ public interface UserService extends UserDetailsService {
 
     User save(User user);
 
-    List<User> findAll();
+    List<User> find(Map<String, Object> params);
 
-    Optional<User> authenticate(String login, String senha);
+    User authenticate(String login, String senha);
 
     Optional<User> findUserById(Long id);
 

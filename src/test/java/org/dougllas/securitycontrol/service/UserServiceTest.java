@@ -59,9 +59,9 @@ public class UserServiceTest {
         given(userRepository.findByUsername(anyString())).willReturn(Optional.of(user));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
-        Optional<User> optionalUser = userService.authenticate(user.getUsername(), user.getPassword());
+        User optionalUser = userService.authenticate(user.getUsername(), user.getPassword());
 
-        then(optionalUser.get())
+        then(optionalUser)
                 .as("Verificar se retornou um usuario autenticado")
                 .isEqualTo(user);
     }

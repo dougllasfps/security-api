@@ -1,6 +1,12 @@
 package org.dougllas.securitycontrol.api.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.dougllas.securitycontrol.model.entity.User;
 import org.dougllas.securitycontrol.service.UserService;
 import org.junit.Before;
@@ -15,14 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Criado por dougllas.sousa em 22/01/2019.
@@ -52,7 +51,7 @@ public class AuthResourceTest {
     @Test
     public void deveRetornarUsuarioLogadoComToken() throws Exception {
 
-        given(userService.authenticate(anyString(), anyString())).willReturn(Optional.of(user));
+        given(userService.authenticate(anyString(), anyString())).willReturn(user);
 
         mvc.perform(
             post(ENDPOINT + "/auth")
@@ -69,7 +68,7 @@ public class AuthResourceTest {
     @Test
     public void deveRetornarErroDeAutorizacaoQuandoUsuarioForInvalido() throws Exception {
 
-        given(userService.authenticate(anyString(), anyString())).willReturn(Optional.empty());
+        given(userService.authenticate(anyString(), anyString())).willReturn(null);
 
         mvc.perform(
                 post(ENDPOINT + "/auth")
