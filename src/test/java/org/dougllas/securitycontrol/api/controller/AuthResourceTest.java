@@ -41,7 +41,7 @@ public class AuthResourceTest {
 
     User user;
 
-    static final String ENDPOINT = "/api/users/";
+    static final String ENDPOINT = "/api/auth/";
 
     @Before
     public void setUp(){
