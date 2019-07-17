@@ -1,5 +1,8 @@
 package org.dougllas.securitycontrol.api.dto;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
 import javax.validation.constraints.NotEmpty;
 
 import org.dougllas.securitycontrol.model.entity.User;
@@ -20,6 +23,8 @@ import lombok.Setter;
 public class UserDTO {
 
     private Long id;
+    
+    private String sinceDate;
 
     @NotEmpty(message = "Campo name é obrigatório.")
     private String name;
@@ -51,6 +56,7 @@ public class UserDTO {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
+        Optional.ofNullable(user.getSince()).ifPresent( date -> dto.setSinceDate(date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
         return dto;
     }
 
