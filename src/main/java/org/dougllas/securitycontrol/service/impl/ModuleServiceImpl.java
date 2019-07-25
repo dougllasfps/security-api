@@ -9,4 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ModuleServiceImpl extends EntityServiceImpl<Module, Long, ModuleRepository> implements ModuleService {
 
+	@Override
+	public Long countModules() {
+		return getRepository().count();
+	}
+
 }

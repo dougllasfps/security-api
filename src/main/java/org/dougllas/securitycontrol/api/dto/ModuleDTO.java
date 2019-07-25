@@ -14,4 +14,8 @@ public class ModuleDTO {
 
     @NotEmpty(message = "Campo name é obrigatório.")
     private String name;
+    
+    @NotEmpty(message = "Campo label é obrigatório.")
+    private String label;
+    
 }

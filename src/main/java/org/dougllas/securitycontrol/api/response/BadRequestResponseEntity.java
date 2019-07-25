@@ -1,26 +1,24 @@
 package org.dougllas.securitycontrol.api.response;
 
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+public class BadRequestResponseEntity<List> extends ResponseEntity<List> {
 
-public class BadRequestResponseEntity<T> extends ResponseEntity<T> {
+    private List errors;
 
-    private Collection<String> errors;
-
-    public BadRequestResponseEntity( Collection<String> errors ){
-        super(HttpStatus.BAD_REQUEST);
-        this.errors = errors;
+    public BadRequestResponseEntity( List errors ){
+    	super(errors, HttpStatus.BAD_REQUEST);
     }
 
     public BadRequestResponseEntity(BindingResult result ){
-        this(result.getAllErrors().stream().map( e -> e.getDefaultMessage() ).collect(Collectors.toList()));
+        this((List) result.getAllErrors().stream().map( e -> e.getDefaultMessage() ).collect(Collectors.toList()));
     }
 
-    public Collection<String> getErrors() {
+    public List getErrors() {
         return errors;
     }
 }

@@ -8,6 +8,7 @@ import org.dougllas.securitycontrol.api.dto.ModuleDTO;
 import org.dougllas.securitycontrol.api.response.BadRequestResponseEntity;
 import org.dougllas.securitycontrol.model.entity.Module;
 import org.dougllas.securitycontrol.service.ModuleService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -32,6 +33,11 @@ public class ModuleResource {
 
 	private final ModuleService service;
 	
+	@GetMapping("/count")
+	public Long count() {
+		return service.countModules();
+	}
+	
 	@PostMapping
 	public ResponseEntity save( @Valid @RequestBody ModuleDTO module , BindingResult bindingResult) {
 		if(bindingResult.hasErrors()){
@@ -39,7 +45,7 @@ public class ModuleResource {
         }
 		
 		log.info("saving new module {} " , module.getName());
-		Module entity = new Module(null, module.getName());
+		Module entity = convert(module);
 		service.save(entity);
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
@@ -54,7 +60,7 @@ public class ModuleResource {
 		return service.findOne(id).map( m -> {
 			m.setName(module.getName());
 			service.update(m);
-			return ResponseEntity.ok(m);
+			return ResponseEntity.ok(convert(m));
 		}).orElseGet( () -> new ResponseEntity(HttpStatus.NOT_FOUND) );
 	}
 	
@@ -68,8 +74,20 @@ public class ModuleResource {
 	}
 	
 	@GetMapping
-	public List<Module> find( @RequestParam("name") String name ) {
+	public List<Module> find( 
+				@RequestParam("name") String name ,
+				@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+				@RequestParam(value = "size", required = false, defaultValue = "10") Integer size
+	) {
 		log.info("searching module by name {} " , name);
-		return service.find(Module.builder().name(name).build());
+		return service.find(Module.builder().name(name).build(), PageRequest.of(page, size));
+	}
+	
+	public Module convert(ModuleDTO dto) {
+		return Module.builder().name(dto.getName()).label(dto.getLabel()).id(dto.getId()).build();
+	}
+	
+	public ModuleDTO convert(Module entity) {
+		return ModuleDTO.builder().name(entity.getName()).label(entity.getLabel()).id(entity.getId()).build();
 	}
 }
