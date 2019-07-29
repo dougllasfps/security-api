@@ -47,7 +47,7 @@ public class ModuleResource {
 		log.info("saving new module {} " , module.getName());
 		Module entity = convert(module);
 		service.save(entity);
-		return new ResponseEntity(HttpStatus.CREATED);
+		return new ResponseEntity(convert(entity) ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("{id}")
@@ -71,6 +71,14 @@ public class ModuleResource {
 			service.delete(m);
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}).orElseGet( () -> new ResponseEntity(HttpStatus.NOT_FOUND) );
+	}
+	
+	@GetMapping("{id}")
+	public ResponseEntity findOne( @PathVariable("id") Long id) {
+		log.info("finding module of id {} " , id);
+		return service.findOne(id)
+					.map( m -> ResponseEntity.ok(m) )
+					.orElseGet( () -> new ResponseEntity(HttpStatus.NOT_FOUND) );
 	}
 	
 	@GetMapping
